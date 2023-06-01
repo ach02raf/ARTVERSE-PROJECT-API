@@ -186,7 +186,7 @@ exports.PostPublication = async (req, res) => {
         },
       });
       await axios
-        .post("http://localhost:8000/", {
+        .post("https://artverse-project-api-django.onrender.com/", {
           image: img,
         })
         .then((response) => {
