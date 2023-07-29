@@ -169,7 +169,7 @@ exports.PostPublication = async (req, res) => {
       hashtagList.push(tagId);
     }
   }
-  console.log(req.body);
+  console.log(req.body.text);
   console.log(req.files);
   var ImgList = [];
   if (req.files.images) {
