@@ -172,26 +172,26 @@ exports.PostPublication = async (req, res) => {
   var ImgList = [];
   if (req.files.images) {
     for (var element of req.files.images) {
-      var img = new imgModel({
-        name: element.filename,
-        img: {
-          data: fs.readFileSync(
-            path.join(
-              path.dirname(require.main.filename),
-              "uploads",
-              element.filename
-            )
-          ),
-          contentType: "image/png",
-        },
-      });
+      // var img = new imgModel({
+      //   name: element.filename,
+      //   img: {
+      //     data: fs.readFileSync(
+      //       path.join(
+      //         path.dirname(require.main.filename),
+      //         "uploads",
+      //         element.filename
+      //       )
+      //     ),
+      //     contentType: "image/png",
+      //   },
+      // });
       await axios
         .post("https://artverse-project-api-django.onrender.com/", {
-          image: img,
+          image: element,
         })
         .then((response) => {
           if (response.data === 0) {
-            ImgList.push(img);
+            ImgList.push(element);
           } else {
             verification = false;
           }
