@@ -171,67 +171,67 @@ exports.PostPublication = async (req, res) => {
   }
   console.log(req.body.text);
   console.log(req.files);
-  var ImgList = [];
-  if (req.files.images) {
-    for (var element of req.files.images) {
-      var img = new imgModel({
-        name: element.filename,
-        img: {
-          data: fs.readFileSync(
-            path.join(
-              path.dirname(require.main.filename),
-              "uploads",
-              element.filename
-            )
-          ),
-          contentType: "image/png",
-        },
-      });
-      await axios
-        .post("https://artverse-project-api-django.onrender.com/", {
-          image: img,
-        })
-        .then((response) => {
-          if (response.data === 0) {
-            ImgList.push(img);
-          } else {
-            verification = false;
-          }
-        })
-        .catch(() => {
-          res.status(401).json({ message: "error" });
-        });
-    }
-  }
-  var ImgList1 = [];
-  if (verification) {
-    for (item of ImgList) {
-      await item.save().then((res) => {
-        ImgList1.push({ idimg: res._id, imgName: element.filename });
-      });
-    }
-    var post = new publicationModel({
-      Id_user: req.body.Id_user,
-      text: req.body.text,
-      date: currentDate,
-      img: ImgList1,
-      hashtag: hashtagList,
-    });
-    await post.save().then(() => {
-      res.status(200).json({ message: "post added" });
-    });
-  } else {
-    res.status(401).json({ message: "problem copyrigth" });
-  }
-};
+  //   var ImgList = [];
+  //   if (req.files.images) {
+  //     for (var element of req.files.images) {
+  //       var img = new imgModel({
+  //         name: element.filename,
+  //         img: {
+  //           data: fs.readFileSync(
+  //             path.join(
+  //               path.dirname(require.main.filename),
+  //               "uploads",
+  //               element.filename
+  //             )
+  //           ),
+  //           contentType: "image/png",
+  //         },
+  //       });
+  //       await axios
+  //         .post("https://artverse-project-api-django.onrender.com/", {
+  //           image: img,
+  //         })
+  //         .then((response) => {
+  //           if (response.data === 0) {
+  //             ImgList.push(img);
+  //           } else {
+  //             verification = false;
+  //           }
+  //         })
+  //         .catch(() => {
+  //           res.status(401).json({ message: "error" });
+  //         });
+  //     }
+  //   }
+  //   var ImgList1 = [];
+  //   if (verification) {
+  //     for (item of ImgList) {
+  //       await item.save().then((res) => {
+  //         ImgList1.push({ idimg: res._id, imgName: element.filename });
+  //       });
+  //     }
+  //     var post = new publicationModel({
+  //       Id_user: req.body.Id_user,
+  //       text: req.body.text,
+  //       date: currentDate,
+  //       img: ImgList1,
+  //       hashtag: hashtagList,
+  //     });
+  //     await post.save().then(() => {
+  //       res.status(200).json({ message: "post added" });
+  //     });
+  //   } else {
+  //     res.status(401).json({ message: "problem copyrigth" });
+  //   }
+  // };
 
-exports.getAllImages = async (req, res) => {
-  try {
-    const images = await imgModel.find();
-    res.send(images);
-  } catch (error) {
-    res.status(500).send("Server Error");
-  }
+  // exports.getAllImages = async (req, res) => {
+  //   try {
+  //     const images = await imgModel.find();
+  //     res.send(images);
+  //   } catch (error) {
+  //     res.status(500).send("Server Error");
+  //   }
 };
 
 // *************************
