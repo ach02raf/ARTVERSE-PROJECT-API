@@ -143,89 +143,84 @@ exports.getPublicationByUserId = async (req, res) => {
   }
 };
 exports.PostPublication = async (req, res) => {
-  // verification = true;
-  // let currentDate = Date.now();
-  // var hashtagList = [];
-  // if (req.body.hashtags) {
-  //   // Convert hashtags to an array if it's not already an array
-  //   const hashtags = Array.isArray(req.body.hashtags)
-  //     ? req.body.hashtags
-  //     : [req.body.hashtags];
-  //   for (const tag of hashtags) {
-  //     const existingTag = await Hashtag.findOne({ tag_name: tag });
-  //     let tagId;
-  //     if (!existingTag) {
-  //       // If tag doesn't exist, create a new tag and save it to the database
-  //       const newTag = new Hashtag();
-  //       newTag.tag_name = tag;
-  //       newTag.copyrightChecked = req.body.copyrightChecked;
-  //       await newTag.save();
-  //       tagId = newTag._id;
-  //     } else {
-  //       // If tag exists, get its ID
-  //       tagId = existingTag._id;
-  //     }
-  //     // Add the ID to the list of hashtags for the post
-  //     hashtagList.push(tagId);
-  //   }
-  // }
-  // console.log(req.body.text);
-  // console.log(req.files);
-  // var ImgList = [];
-  // if (req.files.images) {
-  //   for (var element of req.files.images) {
-  //     var img = new imgModel({
-  //       name: element.filename,
-  //       img: {
-  //         data: fs.readFileSync(
-  //           path.join(
-  //             path.dirname(require.main.filename),
-  //             "uploads",
-  //             element.filename
-  //           )
-  //         ),
-  //         contentType: "image/png",
-  //       },
-  //     });
-  //     await axios
-  //       .post("https://artverse-project-api-django.onrender.com/", {
-  //         image: img,
-  //       })
-  //       .then((response) => {
-  //         if (response.data === 0) {
-  //           ImgList.push(img);
-  //         } else {
-  //           verification = false;
-  //         }
-  //       })
-  //       .catch(() => {
-  //         res.status(401).json({ message: "error" });
-  //       });
-  //   }
-  // }
-  // var ImgList1 = [];
-  // if (verification) {
-  //   for (item of ImgList) {
-  //     await item.save().then((res) => {
-  //       ImgList1.push({ idimg: res._id, imgName: element.filename });
-  //     });
-  //   }
-  //   var post = new publicationModel({
-  //     Id_user: req.body.Id_user,
-  //     text: req.body.text,
-  //     date: currentDate,
-  //     img: ImgList1,
-  //     hashtag: hashtagList,
-  //   });
-  //   await post.save().then(() => {
-  //     res.status(200).json({ message: "post added" });
-  //   });
-  // } else {
-  //   res.status(401).json({ message: "problem copyrigth" });
-  // }
-  console.log(req.body.text);
-  console.log(req.files);
-  res.send("hello");
+  verification = true;
+  let currentDate = Date.now();
+  var hashtagList = [];
+  if (req.body.hashtags) {
+    // Convert hashtags to an array if it's not already an array
+    const hashtags = Array.isArray(req.body.hashtags)
+      ? req.body.hashtags
+      : [req.body.hashtags];
+    for (const tag of hashtags) {
+      const existingTag = await Hashtag.findOne({ tag_name: tag });
+      let tagId;
+      if (!existingTag) {
+        // If tag doesn't exist, create a new tag and save it to the database
+        const newTag = new Hashtag();
+        newTag.tag_name = tag;
+        newTag.copyrightChecked = req.body.copyrightChecked;
+        await newTag.save();
+        tagId = newTag._id;
+      } else {
+        // If tag exists, get its ID
+        tagId = existingTag._id;
+      }
+      // Add the ID to the list of hashtags for the post
+      hashtagList.push(tagId);
+    }
+  }
+  var ImgList = [];
+  if (req.files.images) {
+    for (var element of req.files.images) {
+      var img = new imgModel({
+        name: element.filename,
+        img: {
+          data: fs.readFileSync(
+            path.join(
+              path.dirname(require.main.filename),
+              "uploads",
+              element.filename
+            )
+          ),
+          contentType: "image/png",
+        },
+      });
+      await axios
+        .post("https://artverse-project-api-django.onrender.com/", {
+          image: img,
+        })
+        .then((response) => {
+          if (response.data === 0) {
+            ImgList.push(img);
+          } else {
+            verification = false;
+          }
+        })
+        .catch(() => {
+          res.status(401).json({ message: "error" });
+        });
+    }
+  }
+  var ImgList1 = [];
+  if (verification) {
+    for (item of ImgList) {
+      await item.save().then((res) => {
+        ImgList1.push({ idimg: res._id, imgName: element.filename });
+      });
+    }
+    var post = new publicationModel({
+      Id_user: req.body.Id_user,
+      text: req.body.text,
+      date: currentDate,
+      img: ImgList1,
+      hashtag: hashtagList,
+    });
+    await post.save().then(() => {
+      res.status(200).json({ message: "post added" });
+    });
+  } else {
+    res.status(401).json({ message: "problem copyrigth" });
+  }
 };
 
 exports.getAllImages = async (req, res) => {

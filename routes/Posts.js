@@ -16,7 +16,7 @@ router.put("/commreaction", PostControllers.commreaction);
 router.put("/addcommentReply", PostControllers.addcommentReply);
 router.post(
   "/PostPublication",
-  // upload.fields([{name: "images"}]),
+  upload.fields([{ name: "images" }]),
   PostControllers.PostPublication
 );
 
