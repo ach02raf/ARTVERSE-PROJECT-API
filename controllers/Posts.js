@@ -223,7 +223,7 @@ exports.PostPublication = async (req, res) => {
   // } else {
   //   res.status(401).json({ message: "problem copyrigth" });
   // }
-  console.log(JSON.stringify(req.body));
+  console.log(req.body.text);
   console.log(req.files);
   res.send("hello");
 };
